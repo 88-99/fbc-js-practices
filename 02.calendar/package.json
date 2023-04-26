@@ -1,8 +1,12 @@
 {
   "scripts": {
     "fix": "prettier --write . && eslint --fix .",
-    "lint": "prettier --check . && eslint ."
+    "lint": "prettier --check . && eslint .",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "eslint": "eslint src"
   },
+  "author": "",
+  "license": "ISC",
   "devDependencies": {
     "eslint": "^8.24.0",
     "eslint-config-prettier": "^8.5.0",
