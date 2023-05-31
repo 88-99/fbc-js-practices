@@ -28,7 +28,7 @@ if (options.month) {
   calendarInfo.month = parseInt(options.month - 1);
 }
 
-console.log(`      ${calendarInfo.year}年 ${calendarInfo.month + 1}月`);
+console.log(`      ${calendarInfo.month + 1}月 ${calendarInfo.year}`);
 const wdays = ["日", "月", "火", "水", "木", "金", "土"].join(" ");
 console.log(wdays);
 
