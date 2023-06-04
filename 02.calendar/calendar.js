@@ -10,9 +10,7 @@ dayjs.tz.setDefault("Asia/Tokyo");
 program
   .option("-y, --year <type>", "specify the year")
   .option("-m, --month <type>", "specify the month");
-
 program.parse(process.argv);
-
 const options = program.opts();
 
 let calendarInfo = {
@@ -23,7 +21,6 @@ let calendarInfo = {
 if (options.year) {
   calendarInfo.year = parseInt(options.year);
 }
-
 if (options.month) {
   calendarInfo.month = parseInt(options.month - 1);
 }
@@ -52,22 +49,25 @@ function getDates(firstDate, endDate) {
 }
 const dates = getDates(firstDate, endDate);
 
-function addSpaces(count) {
-  const spaces = "   ".repeat(count);
+function addLeadingSpacesToFirstDay(dayOfWeek) {
+  const spaces = "   ".repeat(dayOfWeek);
   return spaces;
 }
+
+function padStartWithSpace(date) {
+  return date.$D.toString().padStart(2, " ");
+}
+
 function formatCalendar() {
   dates.forEach(function (date, index) {
     if (index === 0) {
-      const spaces = addSpaces(dates[0].$W);
+      const spaces = addLeadingSpacesToFirstDay(dates[0].$W);
       process.stdout.write(`${spaces}`);
     }
     if (date.$W === 6) {
-      date = date.$D.toString().padStart(2, " ");
-      process.stdout.write(`${date} \n`);
+      process.stdout.write(`${padStartWithSpace(date)} \n`);
     } else {
-      date = date.$D.toString().padStart(2, " ");
-      process.stdout.write(`${date} `);
+      process.stdout.write(`${padStartWithSpace(date)} `);
     }
   });
 }
