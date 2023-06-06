@@ -39,10 +39,10 @@ const endDate = dayjs(new Date(calendarInfo.year, calendarInfo.month)).endOf(
 
 function getDates(firstDate, endDate) {
   const dates = [];
-  let currentDate = dayjs(firstDate);
+  let currentDate = firstDate;
 
-  while (currentDate <= dayjs(endDate)) {
-    dates.push(dayjs(currentDate));
+  while (currentDate <= endDate) {
+    dates.push(currentDate);
     currentDate = currentDate.set("date", currentDate.date() + 1);
   }
   return dates;
@@ -50,24 +50,21 @@ function getDates(firstDate, endDate) {
 const dates = getDates(firstDate, endDate);
 
 function addLeadingSpacesToFirstDay(dayOfWeek) {
-  const spaces = "   ".repeat(dayOfWeek);
-  return spaces;
+  return "   ".repeat(dayOfWeek);
 }
 
 function padStartWithSpace(date) {
-  return date.$D.toString().padStart(2, " ");
+  return date.date().toString().padStart(2, " ");
 }
 
 function formatCalendar() {
-  dates.forEach(function (date, index) {
-    if (index === 0) {
-      const spaces = addLeadingSpacesToFirstDay(dates[0].$W);
-      process.stdout.write(`${spaces}`);
-    }
-    if (date.$W === 6) {
-      process.stdout.write(`${padStartWithSpace(date)} \n`);
-    } else {
-      process.stdout.write(`${padStartWithSpace(date)} `);
+  const spaces = addLeadingSpacesToFirstDay(dates[0].day());
+  process.stdout.write(`${spaces}`);
+
+  dates.forEach(function (date) {
+    process.stdout.write(`${padStartWithSpace(date)} `);
+    if (date.day() === 6 || date === endDate.date()) {
+      console.log();
     }
   });
 }
