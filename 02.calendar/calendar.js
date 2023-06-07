@@ -63,7 +63,7 @@ function formatCalendar() {
 
   dates.forEach(function (date) {
     process.stdout.write(`${padStartWithSpace(date)} `);
-    if (date.day() === 6 || date === endDate.date()) {
+    if (date.day() === 6 || date.date() === endDate.date()) {
       console.log();
     }
   });
