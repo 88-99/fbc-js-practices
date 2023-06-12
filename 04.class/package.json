@@ -9,6 +9,7 @@
     "prettier": "^2.7.1"
   },
   "dependencies": {
+    "commander": "^10.0.1",
     "enquirer": "^2.3.6"
   },
   "type": "module"
