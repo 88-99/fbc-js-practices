@@ -21,7 +21,7 @@
         try {
           const response = await fetch(`https://bootcamp.fjord.jp/`);
           if (!response.ok) {
-            throw new NetworkError("Network response was not OK");
+            throw new HttpResponseError("Response was not OK");
           }
           const topPageSource = await response.text();
           console.log(topPageSource);
@@ -31,7 +31,7 @@
               "There has been a problem with your fetch operation:",
               error
             );
-          } else if (error instanceof NetworkError) {
+          } else if (error instanceof HttpResponseError) {
             console.error(error);
           } else {
             throw e;
