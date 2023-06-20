@@ -20,8 +20,10 @@
       async function fetchTopPageSource() {
         try {
           const response = await fetch("https://bootcamp.fjord.jp/");
-          const topPageSource = await response.text();
-          console.log(topPageSource);
+          if (response.ok) {
+            const topPageSource = await response.text();
+            console.log(topPageSource);
+          }
         } catch (error) {
           if (error instanceof TypeError) {
             console.error(
