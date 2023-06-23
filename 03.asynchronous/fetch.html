@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <title>非同期処理(JavaScript)の提出課題</title>
+  </head>
+  <body>
+    <article>
+      <h1>非同期処理(JavaScript)の提出課題</h1>
+      <section>
+        <h2>終了条件</h2>
+        <p>
+          Fetch
+          APIとasync/awaitを使ってフィヨルドブートキャンプのトップページのHTMLをconsole.logを使って出力するコードを書いて、実行結果のスクショとPull
+          RequestのURLを提出しよう。
+        </p>
+      </section>
+    </article>
+    <script>
+      async function fetchTopPageSource() {
+        try {
+          const response = await fetch("https://bootcamp.fjord.jp/");
+          if (response.ok) {
+            const topPageSource = await response.text();
+            console.log(topPageSource);
+          } else {
+            console.log(`Response was not OK. status: ${response.status}`);
+          }
+        } catch (error) {
+          if (error instanceof TypeError) {
+            console.error(
+              "There has been a problem with your fetch operation:",
+              error
+            );
+          } else {
+            throw error;
+          }
+        }
+      }
+      fetchTopPageSource();
+    </script>
+  </body>
+</html>
