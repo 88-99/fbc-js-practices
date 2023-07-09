@@ -5,6 +5,6 @@ export class Memo {
   }
 
   get items() {
-    return this._value;
+    return this.value;
   }
 }

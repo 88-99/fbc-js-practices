@@ -18,7 +18,7 @@ export class Content {
   }
 
   input() {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.rl.on("line", (input) => {
         this.lines = input;
       });

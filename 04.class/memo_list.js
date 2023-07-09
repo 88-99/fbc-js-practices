@@ -25,7 +25,7 @@ export class MemoList {
     });
   }
 
-  select_memo(memos) {
+  selectMemo(memos) {
     const prompt = new Select({
       name: "memo",
       message: "メモを選択して Enterキー を押してください",
@@ -40,7 +40,7 @@ export class MemoList {
       .catch(console.error);
   }
 
-  delete_memo(memos) {
+  deleteMemo(memos) {
     const prompt = new Select({
       name: "memo",
       message: "削除するメモを選択し、Enterキー を押してください",
