@@ -3,8 +3,4 @@ export class Memo {
     this.name = name;
     this.value = value;
   }
-
-  get items() {
-    return this.value;
-  }
 }
