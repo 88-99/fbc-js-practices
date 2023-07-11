@@ -1,8 +1,9 @@
 import * as readline from "node:readline/promises";
 
 export class Content {
+  #lines;
   constructor() {
-    this._lines = [];
+    this.#lines = [];
     this.rl = readline.createInterface({
       input: process.stdin,
       output: process.stdout,
@@ -10,11 +11,11 @@ export class Content {
   }
 
   get lines() {
-    return this._lines;
+    return this.#lines;
   }
 
   set lines(line) {
-    this._lines.push(line);
+    this.#lines.push(line);
   }
 
   input() {
@@ -25,7 +26,7 @@ export class Content {
 
       this.rl.on("close", () => {
         this.rl.close();
-        resolve(this.lines);
+        resolve(this.#lines);
       });
     });
   }
