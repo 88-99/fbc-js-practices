@@ -8,16 +8,12 @@ export class MemoList {
     this.#memos = JSON.parse(fs.readFileSync("memo.json", "utf8"));
   }
 
-  get memos() {
-    return this.#memos;
-  }
-
   set memos(memo) {
     this.#memos.push(memo);
   }
 
-  writeJsonFile(memos) {
-    fs.writeFile("memo.json", JSON.stringify(memos), (err) => {
+  writeJsonFile() {
+    fs.writeFile("memo.json", JSON.stringify(this.#memos), (err) => {
       if (err) {
         console.error("Error writing to memo.json:", err);
         return;
@@ -26,11 +22,11 @@ export class MemoList {
     });
   }
 
-  selectMemo(memos) {
+  selectMemo() {
     const prompt = new Select({
       name: "memo",
       message: "メモを選択して Enterキー を押してください",
-      choices: memos,
+      choices: this.#memos,
     });
     prompt
       .run()
@@ -41,16 +37,16 @@ export class MemoList {
       .catch(console.error);
   }
 
-  deleteMemo(memos) {
+  deleteMemo() {
     const prompt = new Select({
       name: "memo",
       message: "削除するメモを選択し、Enterキー を押してください",
-      choices: memos,
+      choices: this.#memos,
     });
     prompt
       .run()
       .then((key) => {
-        const filteredMemos = memos.filter((obj) => obj.name !== key);
+        const filteredMemos = this.#memos.filter((obj) => obj.name !== key);
 
         fs.writeFile("memo.json", JSON.stringify(filteredMemos), (err) => {
           if (err) {

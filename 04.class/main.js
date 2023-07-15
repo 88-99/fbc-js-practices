@@ -14,10 +14,10 @@ const main = function () {
 
   const memoList = new MemoList();
   if (options.list) {
-    memoList.selectMemo(memoList.items);
+    memoList.selectMemo();
   } else if (options.delete) {
     console.log("メモを選択して Enterキー を押してください");
-    memoList.deleteMemo(memoList.items);
+    memoList.deleteMemo();
   } else {
     console.log("保存は Enterキー を押した後に Ctrl + C を押してください");
     registerNewMemo();
@@ -34,7 +34,7 @@ const main = function () {
       .then((memo) => {
         const memoList = new MemoList();
         memoList.memos = memo;
-        memoList.writeJsonFile(memoList.memos);
+        memoList.writeJsonFile();
       })
       .catch((error) => {
         console.error(error);
