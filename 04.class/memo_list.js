@@ -3,16 +3,17 @@ import enquirer from "enquirer";
 const { Select } = enquirer;
 
 export class MemoList {
+  #memos;
   constructor() {
-    this.memos = JSON.parse(fs.readFileSync("memo.json", "utf8"));
+    this.#memos = JSON.parse(fs.readFileSync("memo.json", "utf8"));
   }
 
-  get items() {
-    return this.memos;
+  get memos() {
+    return this.#memos;
   }
 
-  set items(memo) {
-    this.memos.push(memo);
+  set memos(memo) {
+    this.#memos.push(memo);
   }
 
   writeJsonFile(memos) {

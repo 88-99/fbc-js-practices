@@ -33,8 +33,8 @@ const main = function () {
       })
       .then((memo) => {
         const memoList = new MemoList();
-        memoList.items = memo;
-        memoList.writeJsonFile(memoList.items);
+        memoList.memos = memo;
+        memoList.writeJsonFile(memoList.memos);
       })
       .catch((error) => {
         console.error(error);
