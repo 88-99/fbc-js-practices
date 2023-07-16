@@ -8,7 +8,7 @@ export class MemoList {
     this.#memos = JSON.parse(fs.readFileSync("memo.json", "utf8"));
   }
 
-  set memos(memo) {
+  addMemo(memo) {
     this.#memos.push(memo);
   }
 
