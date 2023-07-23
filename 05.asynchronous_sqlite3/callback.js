@@ -2,27 +2,24 @@ import sqlite3 from "sqlite3";
 
 const db = new sqlite3.Database(":memory:");
 
-db.run("CREATE TABLE books (title TEXT)", () => {
-  const stmt = db.prepare("INSERT INTO books VALUES (?)");
-  for (let i = 0; i < 10; i++) {
-    stmt.run("title" + (i + 1));
-  }
-  stmt.finalize();
-
-  setTimeout(function () {
-    selectRecord();
-  }, 10);
+db.run("CREATE TABLE books (id INTEGER PRIMARY KEY, title TEXT)", () => {
+  db.run("INSERT INTO books (title) VALUES ('title1')", () => {
+    db.run("INSERT INTO books (title) VALUES ('title2')", () => {
+      db.run("INSERT INTO books (title) VALUES ('title3')", () => {
+        db.run("INSERT INTO books (title) VALUES ('title4')", () => {
+          db.each(
+            "SELECT rowid AS id, title FROM books ORDER BY id ASC",
+            (err, row) => {
+              console.log(row.id + ": " + row.title);
+            },
+            () => {
+              db.run("DROP TABLE books", () => {
+                db.close();
+              });
+            }
+          );
+        });
+      });
+    });
+  });
 });
-
-function selectRecord() {
-  db.each(
-    "SELECT rowid AS id, title FROM books",
-    (err, row) => {
-      console.log(row.id + ": " + row.title);
-    },
-    () => {
-      db.run("DROP TABLE books");
-      db.close();
-    }
-  );
-}
