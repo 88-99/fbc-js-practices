@@ -2,37 +2,71 @@ import sqlite3 from "sqlite3";
 
 const db = new sqlite3.Database(":memory:");
 
-function insertRecord() {
-  return new Promise(() => {
-    db.run("CREATE TABLE books (title TEXT)", () => {
-      const stmt = db.prepare("INSERT INTO books VALUES (?)");
-      for (let i = 0; i < 10; i++) {
-        stmt.run("title" + (i + 1));
-      }
-      stmt.finalize();
+function createTable() {
+  return new Promise((resolve) => {
+    db.run("CREATE TABLE books (id INTEGER PRIMARY KEY, title TEXT)", () => {
+      resolve();
     });
   });
 }
 
-function selectRecord() {
-  return new Promise(() => {
-    setTimeout(function () {
-      db.each("SELECT rowid AS id, title FROM books", (err, row) => {
-        console.log(row.id + ": " + row.title);
-      });
-    }, 10);
+function insertTitle1() {
+  return new Promise((resolve) => {
+    db.run("INSERT INTO books (title) VALUES ('title1')", function () {
+      console.log(`lastID: ${this.lastID}`);
+      resolve();
+    });
   });
 }
 
-function dropTable() {
-  db.run("DROP TABLE books");
-  db.close();
+function insertTitle2() {
+  return new Promise((resolve) => {
+    db.run("INSERT INTO books (title) VALUES ('title2')", function () {
+      console.log(`lastID: ${this.lastID}`);
+      resolve();
+    });
+  });
+}
+
+function insertTitle3() {
+  return new Promise((resolve) => {
+    db.run("INSERT INTO books (title) VALUES ('title3')", function () {
+      console.log(`lastID: ${this.lastID}`);
+      resolve();
+    });
+  });
+}
+
+function insertTitle4() {
+  return new Promise((resolve) => {
+    db.run("INSERT INTO books (title) VALUES ('title4')", function () {
+      console.log(`lastID: ${this.lastID}`);
+      resolve();
+    });
+  });
+}
+
+function selectTitle() {
+  return db.each(
+    "SELECT id, title FROM books ORDER BY id ASC",
+    (err, row) => {
+      console.log(`${row.id}: ${row.title}`);
+    },
+    () => {
+      db.run("DROP TABLE books", () => {
+        db.close();
+      });
+    }
+  );
 }
 
 async function main() {
-  insertRecord();
-  await selectRecord();
-  dropTable();
+  await createTable();
+  await insertTitle1();
+  await insertTitle2();
+  await insertTitle3();
+  await insertTitle4();
+  selectTitle();
 }
 
 main();
