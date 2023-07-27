@@ -44,15 +44,22 @@ createTable()
     });
   })
   .then(() => {
-    return db.each(
-      "SELECT id, title FROM books ORDER BY id ASC",
-      (err, row) => {
-        console.log(`${row.id}: ${row.title}`);
-      },
-      () => {
-        db.run("DROP TABLE books", () => {
-          db.close();
-        });
-      }
-    );
+    return new Promise((resolve) => {
+      return db.each(
+        "SELECT id, title FROM books ORDER BY id ASC",
+        (err, row) => {
+          console.log(`${row.id}: ${row.title}`);
+          resolve();
+        }
+      );
+    });
+  })
+  .then(() => {
+    return new Promise((resolve) => {
+      db.run("DROP TABLE books");
+      resolve();
+    });
+  })
+  .then(() => {
+    db.close();
   });

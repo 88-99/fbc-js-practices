@@ -47,17 +47,23 @@ function insertTitle4() {
 }
 
 function selectTitle() {
-  return db.each(
-    "SELECT id, title FROM books ORDER BY id ASC",
-    (err, row) => {
+  return new Promise((resolve) => {
+    db.each("SELECT id, title FROM books ORDER BY id ASC", (err, row) => {
       console.log(`${row.id}: ${row.title}`);
-    },
-    () => {
-      db.run("DROP TABLE books", () => {
-        db.close();
-      });
-    }
-  );
+      resolve();
+    });
+  });
+}
+
+function dropTable() {
+  return new Promise((resolve) => {
+    db.run("DROP TABLE books");
+    resolve();
+  });
+}
+
+function dbClose() {
+  db.close();
 }
 
 async function main() {
@@ -66,7 +72,9 @@ async function main() {
   await insertTitle2();
   await insertTitle3();
   await insertTitle4();
-  selectTitle();
+  await selectTitle();
+  await dropTable();
+  dbClose();
 }
 
 main();
