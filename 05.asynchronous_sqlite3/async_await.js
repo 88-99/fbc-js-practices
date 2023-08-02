@@ -10,36 +10,9 @@ function createTable() {
   });
 }
 
-function insertTitle1() {
+function insertTitle(title) {
   return new Promise((resolve) => {
-    db.run("INSERT INTO books (title) VALUES ('title1')", function () {
-      console.log(`lastID: ${this.lastID}`);
-      resolve();
-    });
-  });
-}
-
-function insertTitle2() {
-  return new Promise((resolve) => {
-    db.run("INSERT INTO books (title) VALUES ('title2')", function () {
-      console.log(`lastID: ${this.lastID}`);
-      resolve();
-    });
-  });
-}
-
-function insertTitle3() {
-  return new Promise((resolve) => {
-    db.run("INSERT INTO books (title) VALUES ('title3')", function () {
-      console.log(`lastID: ${this.lastID}`);
-      resolve();
-    });
-  });
-}
-
-function insertTitle4() {
-  return new Promise((resolve) => {
-    db.run("INSERT INTO books (title) VALUES ('title4')", function () {
+    db.run("INSERT INTO books (title) VALUES (?)", [title], function () {
       console.log(`lastID: ${this.lastID}`);
       resolve();
     });
@@ -68,10 +41,10 @@ function dbClose() {
 
 async function main() {
   await createTable();
-  await insertTitle1();
-  await insertTitle2();
-  await insertTitle3();
-  await insertTitle4();
+  await insertTitle("title1");
+  await insertTitle("title2");
+  await insertTitle("title3");
+  await insertTitle("title4");
   await selectTitle();
   await dropTable();
   dbClose();
