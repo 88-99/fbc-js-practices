@@ -2,47 +2,45 @@ import sqlite3 from "sqlite3";
 
 const db = new sqlite3.Database(":memory:");
 
-function createTable() {
+function run(sql, title) {
   return new Promise((resolve) => {
-    db.run("CREATE TABLE books (id INTEGER PRIMARY KEY, title TEXT)", () => {
-      resolve();
+    db.run(sql, [title], function () {
+      resolve(this);
     });
   });
 }
 
-createTable()
-  .then(() => insertTitle("title1"))
-  .then(() => insertTitle("title2"))
-  .then(() => insertTitle("title3"))
-  .then(() => insertTitle("title4"))
-  .then(() => selectRecord())
-  .then(() => doropTable())
-  .then(() => db.close());
-
-function insertTitle(title) {
+function each(sql) {
   return new Promise((resolve) => {
-    db.run("INSERT INTO books (title) VALUES (?)", [title], function () {
-      console.log(`lastID: ${this.lastID}`);
-      resolve();
-    });
+    return db.each(sql, (err, row) => console.log(`${row.id}: ${row.title}`));
   });
 }
 
-function selectRecord() {
-  return new Promise((resolve) => {
-    return db.each(
-      "SELECT id, title FROM books ORDER BY id ASC",
-      (err, row) => {
-        console.log(`${row.id}: ${row.title}`);
-        resolve();
-      }
-    );
-  });
+function close() {
+  db.close();
 }
 
-function doropTable() {
-  return new Promise((resolve) => {
-    db.run("DROP TABLE books");
-    resolve();
-  });
-}
+run("CREATE TABLE books (id INTEGER PRIMARY KEY, title TEXT)")
+  .then(() =>
+    run("INSERT INTO books (title) VALUES (?)", "title1").then((response) => {
+      console.log(`lastID: ${response.lastID}`);
+    })
+  )
+  .then(() =>
+    run("INSERT INTO books (title) VALUES (?)", "title2").then((response) => {
+      console.log(`lastID: ${response.lastID}`);
+    })
+  )
+  .then(() =>
+    run("INSERT INTO books (title) VALUES (?)", "title3").then((response) => {
+      console.log(`lastID: ${response.lastID}`);
+    })
+  )
+  .then(() =>
+    run("INSERT INTO books (title) VALUES (?)", "title4").then((response) => {
+      console.log(`lastID: ${response.lastID}`);
+    })
+  )
+  .then(() => each("SELECT id, title FROM books ORDER BY id ASC"))
+  .then(() => run("DROP TABLE books"))
+  .then(() => close());
