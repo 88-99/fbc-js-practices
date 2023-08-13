@@ -2,7 +2,7 @@ import sqlite3 from "sqlite3";
 
 const db = new sqlite3.Database(":memory:");
 
-function run(sql, bindValue) {
+function run(db, sql, bindValue) {
   return new Promise((resolve) => {
     db.run(sql, [bindValue], function () {
       resolve(this);
@@ -27,20 +27,20 @@ function close(db) {
   });
 }
 
-run("CREATE TABLE books (id INTEGER PRIMARY KEY, title TEXT)")
-  .then(() => run("INSERT INTO books (title) VALUES (?)", "title1"))
+run(db, "CREATE TABLE books (id INTEGER PRIMARY KEY, title TEXT)")
+  .then(() => run(db, "INSERT INTO books (title) VALUES (?)", "title1"))
   .then((record) => {
     console.log(`lastID: ${record.lastID}`);
   })
-  .then(() => run("INSERT INTO books (title) VALUES (?)", "title2"))
+  .then(() => run(db, "INSERT INTO books (title) VALUES (?)", "title2"))
   .then((record) => {
     console.log(`lastID: ${record.lastID}`);
   })
-  .then(() => run("INSERT INTO books (title) VALUES (?)", "title3"))
+  .then(() => run(db, "INSERT INTO books (title) VALUES (?)", "title3"))
   .then((record) => {
     console.log(`lastID: ${record.lastID}`);
   })
-  .then(() => run("INSERT INTO books (title) VALUES (?)", "title4"))
+  .then(() => run(db, "INSERT INTO books (title) VALUES (?)", "title4"))
   .then((record) => {
     console.log(`lastID: ${record.lastID}`);
   })
@@ -50,5 +50,5 @@ run("CREATE TABLE books (id INTEGER PRIMARY KEY, title TEXT)")
       console.log(`${record.id}: ${record.title}`);
     }
   })
-  .then(() => run("DROP TABLE books"))
+  .then(() => run(db, "DROP TABLE books"))
   .then(() => close(db));
