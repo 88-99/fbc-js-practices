@@ -1,54 +1,81 @@
 import sqlite3 from "sqlite3";
 
-const db = new sqlite3.Database(":memory:");
-
-function run(db, sql, bindValue) {
+function run(db, sql, ...param) {
   return new Promise((resolve) => {
-    db.run(sql, [bindValue], function () {
+    db.run(sql, ...param, function () {
       resolve(this);
     });
   });
 }
 
-function each(db, sql) {
+function each(db, sql, callback) {
   return new Promise((resolve) => {
-    const responses = [];
-    db.each(sql, (err, response) => {
-      responses.push(response);
-      resolve(responses);
-    });
+    db.each(sql, (err, row) => {
+      callback(row);
+    }),
+      () => {
+        resolve();
+      };
   });
 }
 
 function close(db) {
   return new Promise((resolve) => {
-    db.close();
-    resolve();
+    db.close(() => resolve());
   });
 }
 
-run(db, "CREATE TABLE books (id INTEGER PRIMARY KEY, title TEXT)")
-  .then(() => run(db, "INSERT INTO books (title) VALUES (?)", "title1"))
+const db = new sqlite3.Database(":memory:");
+
+run(db, "CREATE TABLE books (id INTEGER PRIMARY KEY, title TEXT, content TEXT)")
+  .then(() =>
+    run(
+      db,
+      "INSERT INTO books (title, content) VALUES (?, ?)",
+      "title1",
+      "content1"
+    )
+  )
   .then((record) => {
     console.log(`lastID: ${record.lastID}`);
   })
-  .then(() => run(db, "INSERT INTO books (title) VALUES (?)", "title2"))
+  .then(() =>
+    run(
+      db,
+      "INSERT INTO books (title, content) VALUES (?, ?)",
+      "title2",
+      "content2"
+    )
+  )
   .then((record) => {
     console.log(`lastID: ${record.lastID}`);
   })
-  .then(() => run(db, "INSERT INTO books (title) VALUES (?)", "title3"))
+  .then(() =>
+    run(
+      db,
+      "INSERT INTO books (title, content) VALUES (?, ?)",
+      "title3",
+      "content3"
+    )
+  )
   .then((record) => {
     console.log(`lastID: ${record.lastID}`);
   })
-  .then(() => run(db, "INSERT INTO books (title) VALUES (?)", "title4"))
+  .then(() =>
+    run(
+      db,
+      "INSERT INTO books (title, content) VALUES (?, ?)",
+      "title4",
+      "content4"
+    )
+  )
   .then((record) => {
     console.log(`lastID: ${record.lastID}`);
   })
-  .then(() => each(db, "SELECT id, title FROM books ORDER BY id ASC"))
-  .then((records) => {
-    for (const record of records) {
-      console.log(`${record.id}: ${record.title}`);
-    }
-  })
+  .then(() =>
+    each(db, "SELECT id, title, content FROM books ORDER BY id ASC", (row) =>
+      console.log(`${row.id}: ${row.title}, ${row.content}`)
+    )
+  )
   .then(() => run(db, "DROP TABLE books"))
   .then(() => close(db));
