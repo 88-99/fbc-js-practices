@@ -1,8 +1,8 @@
 import sqlite3 from "sqlite3";
 
-function run(db, sql, ...param) {
+function run(db, sql, ...params) {
   return new Promise((resolve) => {
-    db.run(sql, ...param, function () {
+    db.run(sql, ...params, function () {
       resolve(this);
     });
   });
@@ -38,37 +38,31 @@ run(db, "CREATE TABLE books (id INTEGER PRIMARY KEY, title TEXT, content TEXT)")
   )
   .then((record) => {
     console.log(`lastID: ${record.lastID}`);
-  })
-  .then(() =>
-    run(
+    return run(
       db,
       "INSERT INTO books (title, content) VALUES (?, ?)",
       "title2",
       "content2"
-    )
-  )
+    );
+  })
   .then((record) => {
     console.log(`lastID: ${record.lastID}`);
-  })
-  .then(() =>
-    run(
+    return run(
       db,
       "INSERT INTO books (title, content) VALUES (?, ?)",
       "title3",
       "content3"
-    )
-  )
+    );
+  })
   .then((record) => {
     console.log(`lastID: ${record.lastID}`);
-  })
-  .then(() =>
-    run(
+    return run(
       db,
       "INSERT INTO books (title, content) VALUES (?, ?)",
       "title4",
       "content4"
-    )
-  )
+    );
+  })
   .then((record) => {
     console.log(`lastID: ${record.lastID}`);
   })
