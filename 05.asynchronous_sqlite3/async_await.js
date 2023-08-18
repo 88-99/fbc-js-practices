@@ -1,53 +1,77 @@
 import sqlite3 from "sqlite3";
 
+function run(db, sql, ...params) {
+  return new Promise((resolve) => {
+    db.run(sql, ...params, function () {
+      resolve(this);
+    });
+  });
+}
+
+function each(db, sql, callback) {
+  return new Promise((resolve) => {
+    db.each(sql, (err, row) => {
+      callback(row);
+    }),
+      () => {
+        resolve();
+      };
+  });
+}
+
+function close(db) {
+  return new Promise((resolve) => {
+    db.close(() => resolve());
+  });
+}
+
+async function main(db) {
+  await run(
+    db,
+    "CREATE TABLE books (id INTEGER PRIMARY KEY, title TEXT, content TEXT)"
+  );
+
+  const record1 = await run(
+    db,
+    "INSERT INTO books (title, content) VALUES (?, ?)",
+    "title1",
+    "content1"
+  );
+  console.log(`lastID: ${record1.lastID}`);
+
+  const record2 = await run(
+    db,
+    "INSERT INTO books (title, content) VALUES (?, ?)",
+    "title2",
+    "content2"
+  ); // .then((record) => console.log(`lastID: ${record.lastID}`));
+  console.log(`lastID: ${record2.lastID}`);
+
+  const record3 = await run(
+    db,
+    "INSERT INTO books (title, content) VALUES (?, ?)",
+    "title3",
+    "content3"
+  );
+  console.log(`lastID: ${record3.lastID}`);
+
+  const record4 = await run(
+    db,
+    "INSERT INTO books (title, content) VALUES (?, ?)",
+    "title4",
+    "content4"
+  );
+  console.log(`lastID: ${record4.lastID}`);
+
+  await each(
+    db,
+    "SELECT id, title, content FROM books ORDER BY id ASC",
+    (row) => console.log(`${row.id}: ${row.title}, ${row.content}`)
+  );
+
+  await run(db, "DROP TABLE books");
+  await close(db);
+}
+
 const db = new sqlite3.Database(":memory:");
-
-function createTable() {
-  return new Promise((resolve) => {
-    db.run("CREATE TABLE books (id INTEGER PRIMARY KEY, title TEXT)", () => {
-      resolve();
-    });
-  });
-}
-
-function insertTitle(title) {
-  return new Promise((resolve) => {
-    db.run("INSERT INTO books (title) VALUES (?)", [title], function () {
-      console.log(`lastID: ${this.lastID}`);
-      resolve();
-    });
-  });
-}
-
-function selectTitle() {
-  return new Promise((resolve) => {
-    db.each("SELECT id, title FROM books ORDER BY id ASC", (err, row) => {
-      console.log(`${row.id}: ${row.title}`);
-      resolve();
-    });
-  });
-}
-
-function dropTable() {
-  return new Promise((resolve) => {
-    db.run("DROP TABLE books");
-    resolve();
-  });
-}
-
-function dbClose() {
-  db.close();
-}
-
-async function main() {
-  await createTable();
-  await insertTitle("title1");
-  await insertTitle("title2");
-  await insertTitle("title3");
-  await insertTitle("title4");
-  await selectTitle();
-  await dropTable();
-  dbClose();
-}
-
-main();
+main(db);
