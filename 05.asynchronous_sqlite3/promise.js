@@ -65,11 +65,9 @@ run(db, "CREATE TABLE books (id INTEGER PRIMARY KEY, title TEXT, content TEXT)")
   })
   .then((record) => {
     console.log(`lastID: ${record.lastID}`);
-  })
-  .then(() =>
     each(db, "SELECT id, title, content FROM books ORDER BY id ASC", (row) =>
       console.log(`${row.id}: ${row.title}, ${row.content}`)
-    )
-  )
+    );
+  })
   .then(() => run(db, "DROP TABLE books"))
   .then(() => close(db));
