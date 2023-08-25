@@ -10,12 +10,15 @@ function run(db, sql, ...params) {
 
 function each(db, sql, callback) {
   return new Promise((resolve) => {
-    db.each(sql, (err, row) => {
-      callback(row);
-    }),
+    db.each(
+      sql,
+      (err, row) => {
+        callback(row);
+      },
       () => {
         resolve();
-      };
+      }
+    );
   });
 }
 
@@ -25,7 +28,8 @@ function close(db) {
   });
 }
 
-async function main(db) {
+async function main() {
+  const db = new sqlite3.Database(":memory:");
   await run(
     db,
     "CREATE TABLE books (id INTEGER PRIMARY KEY, title TEXT, content TEXT)"
@@ -72,6 +76,4 @@ async function main(db) {
   await run(db, "DROP TABLE books");
   await close(db);
 }
-
-const db = new sqlite3.Database(":memory:");
-main(db);
+main();

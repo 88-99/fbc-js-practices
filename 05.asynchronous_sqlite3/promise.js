@@ -10,12 +10,15 @@ function run(db, sql, ...params) {
 
 function each(db, sql, callback) {
   return new Promise((resolve) => {
-    db.each(sql, (err, row) => {
-      callback(row);
-    }),
+    db.each(
+      sql,
+      (err, row) => {
+        callback(row);
+      },
       () => {
         resolve();
-      };
+      }
+    );
   });
 }
 

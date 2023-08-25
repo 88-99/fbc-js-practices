@@ -12,12 +12,15 @@ function run(db, sql, ...params) {
 
 function each(db, sql, callback) {
   return new Promise((resolve) => {
-    db.each(sql, (err, row) => {
-      callback(row);
-    }),
+    db.each(
+      sql,
+      (err, row) => {
+        callback(row);
+      },
       () => {
         resolve();
-      };
+      }
+    );
   });
 }
 
@@ -27,7 +30,8 @@ function close(db) {
   });
 }
 
-async function main(db) {
+async function main() {
+  const db = new sqlite3.Database(":memory:");
   try {
     await run(
       db,
@@ -83,5 +87,4 @@ async function main(db) {
   }
 }
 
-const db = new sqlite3.Database(":memory:");
-main(db);
+main();
