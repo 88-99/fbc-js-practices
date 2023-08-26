@@ -1,40 +1,13 @@
 import sqlite3 from "sqlite3";
-
-function run(db, sql, ...params) {
-  return new Promise((resolve, reject) => {
-    db.run(sql, ...params, function () {
-      resolve(this);
-    });
-  });
-}
-
-function each(db, sql, callback) {
-  return new Promise((resolve, reject) => {
-    db.each(
-      sql,
-      (err, row) => {
-        callback(row);
-      },
-      () => {
-        resolve();
-      }
-    );
-  });
-}
-
-function close(db) {
-  return new Promise((resolve, reject) => {
-    db.close(() => resolve());
-  });
-}
+import { run, each, close } from "./functions.js";
 
 const db = new sqlite3.Database(":memory:");
 
-run(db, "CRE TABLE books (id INTEGER PRIMARY KEY, title TEXT, content TEXT)")
+run(db, "CREATE TABLE books (id INTEGER PRIMARY KEY, title TEXT, content TEXT)")
   .then(() =>
     run(
       db,
-      "INS INTO books (title, content) VALUES (?, ?)",
+      "INSERT INTO books (title, content) VALUES (?, ?)",
       "title1",
       "content1"
     )
