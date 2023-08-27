@@ -1,5 +1,6 @@
 import sqlite3 from "sqlite3";
-import { run, each, close } from "./functions.js";
+import { run, each } from "./functions_with_error.js";
+import { close } from "./functions.js";
 
 const db = new sqlite3.Database(":memory:");
 
@@ -12,8 +13,12 @@ run(db, "CREATE TABLE books (id INTEGER PRIMARY KEY, title TEXT, content TEXT)")
       "content1"
     )
   )
+  .catch((err) => console.error("Error発生1", err))
   .then((record) => {
-    console.log(`lastID: ${record.lastID}`);
+    if (record) {
+      console.log(`lastID: ${record.lastID}`);
+    }
+
     return run(
       db,
       "INSERT INTO books (title, content) VALUES (?, ?)",
@@ -21,8 +26,12 @@ run(db, "CREATE TABLE books (id INTEGER PRIMARY KEY, title TEXT, content TEXT)")
       "content2"
     );
   })
+  .catch((err) => console.error("Error発生2", err))
   .then((record) => {
-    console.log(`lastID: ${record.lastID}`);
+    if (record) {
+      console.log(`lastID: ${record.lastID}`);
+    }
+
     return run(
       db,
       "INSERT INTO books (title, content) VALUES (?, ?)",
@@ -30,8 +39,12 @@ run(db, "CREATE TABLE books (id INTEGER PRIMARY KEY, title TEXT, content TEXT)")
       "content3"
     );
   })
+  .catch((err) => console.error("Error発生3", err))
   .then((record) => {
-    console.log(`lastID: ${record.lastID}`);
+    if (record) {
+      console.log(`lastID: ${record.lastID}`);
+    }
+
     return run(
       db,
       "INSERT INTO books (title, content) VALUES (?, ?)",
@@ -39,12 +52,18 @@ run(db, "CREATE TABLE books (id INTEGER PRIMARY KEY, title TEXT, content TEXT)")
       "content4"
     );
   })
+  .catch((err) => console.error("Error発生4", err))
   .then((record) => {
-    console.log(`lastID: ${record.lastID}`);
-    each(db, "SELECT id, title, content FROM books ORDER BY id ASC", (row) =>
-      console.log(`${row.id}: ${row.title}, ${row.content}`)
+    if (record) {
+      console.log(`lastID: ${record.lastID}`);
+    }
+
+    return each(
+      db,
+      "SELECT id, title, content FROM books ORDER BY id ASC",
+      (row) => console.log(`${row.id}: ${row.title}, ${row.content}`)
     );
   })
+  .catch((err) => console.error("Error発生5", err))
   .then(() => run(db, "DROP TABLE books"))
-  .then(() => close(db))
-  .catch((err) => console.error("Error発生", err));
+  .then(() => close(db));
