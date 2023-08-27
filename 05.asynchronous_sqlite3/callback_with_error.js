@@ -32,7 +32,10 @@ db.run("CREATE TABLE books (id INTEGER PRIMARY KEY, title TEXT)", function () {
             (err, row) => {
               console.log(`${row.id}: ${row.title}`);
             },
-            () => {
+            (err) => {
+              if (err) {
+                console.error("Error発生5", err);
+              }
               db.run("DROP TABLE books", () => {
                 db.close();
               });
