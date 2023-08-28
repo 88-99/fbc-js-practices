@@ -1,4 +1,4 @@
-function run(db, sql, ...params) {
+export function run(db, sql, ...params) {
   return new Promise((resolve, reject) => {
     db.run(sql, ...params, function (err) {
       if (err) {
@@ -10,22 +10,36 @@ function run(db, sql, ...params) {
   });
 }
 
-function each(db, sql, callback) {
+export function each(db, sql, callback) {
   return new Promise((resolve, reject) => {
     db.each(
       sql,
       (err, row) => {
-        callback(row);
-      },
-      (err, row) => {
         if (err) {
           reject(err);
         } else {
-          resolve(row);
+          callback(row);
+        }
+      },
+      (err) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve();
         }
       }
     );
   });
 }
 
-export { run, each };
+export function close(db) {
+  return new Promise((resolve, reject) => {
+    db.close((err) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve();
+      }
+    });
+  });
+}

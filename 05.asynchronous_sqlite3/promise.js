@@ -1,5 +1,5 @@
 import sqlite3 from "sqlite3";
-import { run, each, close } from "./functions.js";
+import { run, each, close } from "./functions_with_error.js";
 
 const db = new sqlite3.Database(":memory:");
 
@@ -41,8 +41,10 @@ run(db, "CREATE TABLE books (id INTEGER PRIMARY KEY, title TEXT, content TEXT)")
   })
   .then((record) => {
     console.log(`lastID: ${record.lastID}`);
-    each(db, "SELECT id, title, content FROM books ORDER BY id ASC", (row) =>
-      console.log(`${row.id}: ${row.title}, ${row.content}`)
+    return each(
+      db,
+      "SELECT id, title, content FROM books ORDER BY id ASC",
+      (row) => console.log(`${row.id}: ${row.title}, ${row.content}`)
     );
   })
   .then(() => run(db, "DROP TABLE books"))

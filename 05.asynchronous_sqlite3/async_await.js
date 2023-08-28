@@ -1,5 +1,5 @@
 import sqlite3 from "sqlite3";
-import { run, each, close } from "./functions.js";
+import { run, each, close } from "./functions_with_error.js";
 
 async function main() {
   const db = new sqlite3.Database(":memory:");
@@ -21,7 +21,7 @@ async function main() {
     "INSERT INTO books (title, content) VALUES (?, ?)",
     "title2",
     "content2"
-  ); // .then((record) => console.log(`lastID: ${record.lastID}`));
+  );
   console.log(`lastID: ${record2.lastID}`);
 
   const record3 = await run(

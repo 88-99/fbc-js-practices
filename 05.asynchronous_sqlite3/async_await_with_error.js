@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import sqlite3 from "sqlite3";
-import { run, each, close } from "./functions.js";
+import { run, each, close } from "./functions_with_error.js";
 
 async function main() {
   const db = new sqlite3.Database(":memory:");
@@ -53,7 +53,10 @@ async function main() {
     await close(db);
   } catch (error) {
     if (error instanceof TypeError) {
-      console.error("There has been a problem with your operation:", error);
+      console.error(
+        "There has been a problem with your operation:",
+        error.message
+      );
     } else {
       throw error;
     }
