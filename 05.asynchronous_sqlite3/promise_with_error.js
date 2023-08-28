@@ -7,7 +7,7 @@ run(db, "CREATE TABLE books (id INTEGER PRIMARY KEY, title TEXT, content TEXT)")
   .then(() =>
     run(
       db,
-      "INSERT INTO books (title, content) VALUES (?, ?)",
+      "INS INTO books (title, content) VALUES (?, ?)",
       "title1",
       "content1"
     )
@@ -59,7 +59,7 @@ run(db, "CREATE TABLE books (id INTEGER PRIMARY KEY, title TEXT, content TEXT)")
 
     return each(
       db,
-      "SELECT id, title, content FROM books ORDER BY id ASC",
+      "SEL id, title, content FROM books ORDER BY id ASC",
       (row) => console.log(`${row.id}: ${row.title}, ${row.content}`)
     );
   })

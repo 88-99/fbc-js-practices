@@ -3,7 +3,7 @@ import sqlite3 from "sqlite3";
 const db = new sqlite3.Database(":memory:");
 
 db.run("CREATE TABLE books (id INTEGER PRIMARY KEY, title TEXT)", function () {
-  db.run("INSERT INTO books (title) VALUES ('title1')", function (err) {
+  db.run("INS INTO books (title) VALUES ('title1')", function (err) {
     if (err) {
       console.error("Error発生", err.message);
     } else {
@@ -28,7 +28,7 @@ db.run("CREATE TABLE books (id INTEGER PRIMARY KEY, title TEXT)", function () {
             console.log(`lastID: ${this.lastID}`);
           }
           db.each(
-            "SELECT id, title FROM books ORDER BY id ASC",
+            "SEL id, title FROM books ORDER BY id ASC",
             (err, row) => {
               if (err) {
                 console.error("Error発生5", err.message);
