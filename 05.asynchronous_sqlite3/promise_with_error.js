@@ -3,63 +3,54 @@ import { run, each, close } from "./functions.js";
 
 const db = new sqlite3.Database(":memory:");
 
-run(db, "CREATE TABLE books (id INTEGER PRIMARY KEY, title TEXT, content TEXT)")
+run(
+  db,
+  "CREATE TABLE books (id INTEGER PRIMARY KEY, title TEXT NOT NULL, content TEXT)"
+)
   .then(() =>
     run(
       db,
-      "INS INTO books (title, content) VALUES (?, ?)",
-      "title1",
+      "INSERT INTO books (title, content) VALUES (?, ?)",
+      null,
       "content1"
     )
   )
   .catch((err) => console.error("Error発生1", err.message))
   .then((record) => {
-    if (record) {
-      console.log(`lastID: ${record.lastID}`);
-    }
-
+    console.log(`lastID: ${record.lastID}`);
     return run(
       db,
       "INSERT INTO books (title, content) VALUES (?, ?)",
-      "title2",
+      null,
       "content2"
     );
   })
   .catch((err) => console.error("Error発生2", err.message))
   .then((record) => {
-    if (record) {
-      console.log(`lastID: ${record.lastID}`);
-    }
-
+    console.log(`lastID: ${record.lastID}`);
     return run(
       db,
       "INSERT INTO books (title, content) VALUES (?, ?)",
-      "title3",
+      null,
       "content3"
     );
   })
   .catch((err) => console.error("Error発生3", err.message))
   .then((record) => {
-    if (record) {
-      console.log(`lastID: ${record.lastID}`);
-    }
-
+    console.log(`lastID: ${record.lastID}`);
     return run(
       db,
       "INSERT INTO books (title, content) VALUES (?, ?)",
-      "title4",
+      null,
       "content4"
     );
   })
   .catch((err) => console.error("Error発生4", err.message))
   .then((record) => {
-    if (record) {
-      console.log(`lastID: ${record.lastID}`);
-    }
-
+    console.log(`lastID: ${record.lastID}`);
     return each(
       db,
-      "SEL id, title, content FROM books ORDER BY id ASC",
+      "SELECT id, name, content FROM books ORDER BY id ASC",
       (row) => console.log(`${row.id}: ${row.title}, ${row.content}`)
     );
   })

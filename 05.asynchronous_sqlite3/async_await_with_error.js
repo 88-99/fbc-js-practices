@@ -24,7 +24,7 @@ async function main() {
       "INSERT INTO books (title, content) VALUES (?, ?)",
       "title2",
       "content2"
-    ); // .then((record) => console.log(`lastID: ${record.lastID}`));
+    );
     console.log(`lastID: ${record2.lastID}`);
 
     const record3 = await run(
