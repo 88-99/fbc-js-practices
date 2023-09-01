@@ -8,13 +8,13 @@ async function main() {
   try {
     await run(
       db,
-      "CREATE TABLE books (id INTEGER PRIMARY KEY, title TEXT, content TEXT)"
+      "CREATE TABLE books (id INTEGER PRIMARY KEY, title TEXT NOT NULL, content TEXT)"
     );
 
     const record1 = await run(
       db,
       "INSERT INTO books (title, content) VALUES (?, ?)",
-      "title1",
+      null,
       "content1"
     );
     console.log(`lastID: ${record1.lastID}`);
@@ -22,7 +22,7 @@ async function main() {
     const record2 = await run(
       db,
       "INSERT INTO books (title, content) VALUES (?, ?)",
-      "title2",
+      null,
       "content2"
     );
     console.log(`lastID: ${record2.lastID}`);
@@ -30,7 +30,7 @@ async function main() {
     const record3 = await run(
       db,
       "INSERT INTO books (title, content) VALUES (?, ?)",
-      "title3",
+      null,
       "content3"
     );
     console.log(`lastID: ${record3.lastID}`);
@@ -38,28 +38,21 @@ async function main() {
     const record4 = await run(
       db,
       "INSERT INTO books (title, content) VALUES (?, ?)",
-      "title4",
+      null,
       "content4"
     );
     console.log(`lastID: ${record4.lastID}`);
 
     await each(
       db,
-      "SELECT id, title, content FROM books ORDER BY id ASC",
+      "SELECT id, name, content FROM books ORDER BY id ASC",
       (row) => console.log(`${row.id}: ${row.title}, ${row.content}`)
     );
 
     await run(db, "DROP TABLE books");
     await close(db);
-  } catch (error) {
-    if (error instanceof TypeError) {
-      console.error(
-        "There has been a problem with your operation:",
-        error.message
-      );
-    } else {
-      throw error;
-    }
+  } catch (err) {
+    console.error("Error発生", err.message);
   }
 }
 
