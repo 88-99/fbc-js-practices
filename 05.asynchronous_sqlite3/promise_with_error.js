@@ -47,7 +47,7 @@ run(
   )
   .then((record) => console.log(`lastID: ${record.lastID}`))
   .catch((err) => console.error("Error発生4", err.message))
-  .then((record) =>
+  .then(() =>
     each(db, "SELECT id, name, content FROM books ORDER BY id ASC", (row) =>
       console.log(`${row.id}: ${row.title}, ${row.content}`)
     )
